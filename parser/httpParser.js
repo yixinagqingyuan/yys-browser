@@ -73,6 +73,7 @@ class ResPonseParser {
         return this.waitingHeaderSpace;
       case '\r':// 如果碰见\r 那么就表示要进入请求体的解析了
         //经过测试， 如果不指定Content-Type 那么就不会分片
+        //如果Transfer-Encoding 有值 表示header 的解析已经结束
         if (this.headers['Transfer-Encoding'] === 'chunked') {
           // Transfer-Encoding: 指明了将实体传递给用户所采用的编码形式。
           //
