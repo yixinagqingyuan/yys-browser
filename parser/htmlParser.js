@@ -92,7 +92,7 @@ function data(c) {
   if (c === '<') {
     // 就需要开始搜集内容走到下一个状态开始标签状态
     return tagOpen;
-  } else if (c === EOF) {
+  } else if (c === EOF) {//文件正常终结的情况
     emit({
       type: 'EOF',
     });
@@ -124,6 +124,7 @@ function tagOpen(c) {
     return tagName(c);
   } else {
     // 有可能是<好好学>
+    // 相当于是个兜底处理，一般人没人这么用
     emit({
       type: 'text',
       content: `<${c}`,
@@ -139,7 +140,7 @@ function tagName(c) {
     //切换到处理属性的状态
     return beforeAttributeName;
   } else if (c === '/') {
-    // 可能是自封闭标签
+    // 可能是自封闭标签<a/>
     return selfClosingStartTag;
     // 获取标签tag
   } else if (c.match(/^[a-zA-Z]$/)) {
@@ -377,10 +378,12 @@ function selfClosingStartTag(c) {
 // 同样使用状态机处理html同时生成ast语法树
 //https://astexplorer.net/
 module.exports.parseHTML = function parseHTML(html) {
+  // 开始状态机
   let state = data;
   for (let c of html) {
     state = state(c);
   }
+  //<div id="asdfadf" 文件终结的时候，可能报错，所以需要用一个终结的内容来判断来杜绝有问题的标签情况
   state = state(EOF);
   return stack[0];
 }

@@ -1,5 +1,6 @@
+//https://github.com/zhangyuanwei/node-images
 const images = require('images');
-
+// 将带css的dom转化为带位置信息的dom进行绘制
 function render(viewport, element) {
   if (element.style) {
     const img = images(element.style.width, element.style.height);

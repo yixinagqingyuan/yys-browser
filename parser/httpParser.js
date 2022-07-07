@@ -36,6 +36,7 @@ class ResPonseParser {
   receiveChar(char) {
     // 根据char类型 进入不同的状态
     //初始状态为waitingStatusLine
+    // this.state 没一次都会赋值， this.state没一次都是最新的状态机
     this.state = this.state(char);
   }
 
@@ -223,7 +224,7 @@ class TrunkedBodyParser {
       case '\n':
         return this.waitingLength;
       default:
-        return this.state;
+        return this.state;//也就是返回当前状态机，因为当前的状态没有变动
     }
   }
 }
